@@ -87,10 +87,12 @@ function addSortDropdownOnce() {
     const label = document.createElement('label');
     label.textContent = 'מיון לפי: ';
     label.setAttribute('for', 'product-sort-select');
+    label.style.fontSize = '14px';
 
     const select = document.createElement('select');
     select.id = 'product-sort-select';
     select.style.marginLeft = '5px';
+    select.style.fontSize = '14px';
 
     const options = [
         { label: 'ללא מיון', value: '' },
