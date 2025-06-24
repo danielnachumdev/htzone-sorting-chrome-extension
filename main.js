@@ -8,7 +8,15 @@ const SortEnum = {
     DISCOUNT_PERCENT_ASC: 'DISCOUNT_PERCENT_ASC',
     DISCOUNT_PERCENT_DESC: 'DISCOUNT_PERCENT_DESC',
 };
+
+let currentSortType = '';
+let observer;
+
 function sortProducts(sortType) {
+    if (observer) {
+        observer.disconnect();
+    }
+
     const container = document.querySelector('#filteredProducts ul.slidee');
     const items = Array.from(container.querySelectorAll('li'));
 
@@ -57,7 +65,12 @@ function sortProducts(sortType) {
 
     // Reorder DOM
     items.forEach(li => container.appendChild(li));
+
+    if (observer) {
+        observer.observe(document.body, { childList: true, subtree: true });
+    }
 }
+
 function addSortDropdownOnce() {
     if (document.querySelector('#product-sort-select')) return; // prevent multiple inserts
 
@@ -94,6 +107,7 @@ function addSortDropdownOnce() {
 
     select.addEventListener('change', (e) => {
         const val = e.target.value;
+        currentSortType = val;
         if (val) {
             sortProducts(val);
         }
@@ -111,12 +125,39 @@ const config = { childList: true, subtree: true };
 
 const callback = function (mutationsList, observer) {
     const container = document.querySelector('#filteredProducts');
-    if (container && !document.querySelector('#product-sort-select')) {
+    if (!container) return;
+
+    // Ensure dropdown exists and restore its state if it was re-added
+    if (!document.querySelector('#product-sort-select')) {
         addSortDropdownOnce();
+        const select = document.querySelector('#product-sort-select');
+        if (select) {
+            select.value = currentSortType;
+        }
+    }
+
+    // Check if new product list items were added
+    let newItemsAdded = false;
+    for (const mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+            for (const node of mutation.addedNodes) {
+                // Check if the node is an element that contains a product item
+                if (node.nodeName === 'LI' && node.querySelector && node.querySelector('.item[item_name]')) {
+                    newItemsAdded = true;
+                    break;
+                }
+            }
+        }
+        if (newItemsAdded) break;
+    }
+
+    // Re-apply sort if new items were added and a sort is active
+    if (newItemsAdded && currentSortType) {
+        sortProducts(currentSortType);
     }
 };
 
-const observer = new MutationObserver(callback);
+observer = new MutationObserver(callback);
 observer.observe(targetNode, config);
 
 addSortDropdownOnce();
