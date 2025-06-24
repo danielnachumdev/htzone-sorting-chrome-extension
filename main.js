@@ -58,7 +58,7 @@ function sortProducts(sortType) {
     // Reorder DOM
     items.forEach(li => container.appendChild(li));
 }
-(function addSortDropdownOnce() {
+function addSortDropdownOnce() {
     if (document.querySelector('#product-sort-select')) return; // prevent multiple inserts
 
     const sortContainer = document.createElement('div');
@@ -104,4 +104,19 @@ function sortProducts(sortType) {
 
     const container = document.querySelector('#filteredProducts');
     if (container) container.prepend(sortContainer);
-})();
+}
+
+const targetNode = document.body;
+const config = { childList: true, subtree: true };
+
+const callback = function (mutationsList, observer) {
+    const container = document.querySelector('#filteredProducts');
+    if (container && !document.querySelector('#product-sort-select')) {
+        addSortDropdownOnce();
+    }
+};
+
+const observer = new MutationObserver(callback);
+observer.observe(targetNode, config);
+
+addSortDropdownOnce();
