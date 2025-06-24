@@ -3,10 +3,6 @@
     "description": "An extension to show sorting UI controls when viewing a subcategory on htzone",
     "version": "1.0",
     "manifest_version": 3,
-    "action": {
-        "default_popup": "index.html",
-        "default_icon": "icon.png"
-    },
     "content_scripts": [
         {
             "matches": [
