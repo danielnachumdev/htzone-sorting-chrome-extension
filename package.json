@@ -1,0 +1,25 @@
+{
+  "name": "chrome-htzone-sort-extension",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielnachumdev/htzone-sorting-chrome-extension.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danielnachumdev/htzone-sorting-chrome-extension/issues"
+  },
+  "homepage": "https://github.com/danielnachumdev/htzone-sorting-chrome-extension#readme",
+  "description": "",
+  "devDependencies": {
+    "@types/chrome": "^0.0.326",
+    "typescript": "^5.8.3"
+  }
+}

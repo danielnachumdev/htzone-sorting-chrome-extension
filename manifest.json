@@ -8,7 +8,7 @@
         "tabs"
     ],
     "action": {
-        "default_popup": "index.html",
+        "default_popup": "popup/popup.html",
         "default_icon": "icons/icon128x128.png"
     },
     "icons": {
@@ -19,10 +19,11 @@
     "content_scripts": [
         {
             "matches": [
-                "https://www.htzone.co.il/subcategory/*"
+                "https://www.htzone.co.il/subcategory/*",
+                "https://www.htzone.co.il/sale/*"
             ],
             "js": [
-                "main.js"
+                "/scripts/content.js"
             ]
         }
     ]
