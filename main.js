@@ -74,9 +74,15 @@ function sortProducts(sortType) {
 function addSortDropdownOnce() {
     if (document.querySelector('#product-sort-select')) return; // prevent multiple inserts
 
+    const filterBox = document.createElement('div');
+    filterBox.className = 'filterCatBox';
+
+    const title = document.createElement('p');
+    title.textContent = 'מיון';
+
     const sortContainer = document.createElement('div');
-    sortContainer.style.margin = '10px 0';
-    sortContainer.style.textAlign = 'left';
+    sortContainer.style.padding = '10px 0';
+    sortContainer.style.textAlign = 'right';
 
     const label = document.createElement('label');
     label.textContent = 'מיון לפי: ';
@@ -106,6 +112,7 @@ function addSortDropdownOnce() {
     });
 
     select.addEventListener('change', (e) => {
+        e.stopPropagation();
         const val = e.target.value;
         currentSortType = val;
         if (val) {
@@ -116,8 +123,13 @@ function addSortDropdownOnce() {
     sortContainer.appendChild(label);
     sortContainer.appendChild(select);
 
-    const container = document.querySelector('#filteredProducts');
-    if (container) container.prepend(sortContainer);
+    filterBox.appendChild(title);
+    filterBox.appendChild(sortContainer);
+
+    const formContainer = document.querySelector('#filter_form');
+    if (formContainer) {
+        formContainer.prepend(filterBox);
+    }
 }
 
 const targetNode = document.body;
