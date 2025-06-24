@@ -128,3 +128,6 @@ dist
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Build output
+/dist/
