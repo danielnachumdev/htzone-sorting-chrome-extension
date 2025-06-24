@@ -4,8 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
-    "publish": "node publish.js"
+    "compile": "tsc",
+    "build": "node build.js"
   },
   "repository": {
     "type": "git",

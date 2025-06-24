@@ -22,7 +22,7 @@ async function main() {
 
         // 2. Compile TypeScript
         console.log('[+] Compiling TypeScript...');
-        execSync('npm run build --silent', { stdio: 'inherit' });
+        execSync('npm run compile --silent', { stdio: 'inherit' });
 
         // 3. Copy static assets
         console.log(`[+] Copying static assets to ${config.distDir}...`);

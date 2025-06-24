@@ -1,0 +1,11 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Build Extension",
+            "type": "node",
+            "request": "launch",
+            "preLaunchTask": "npm: build"
+        }
+    ]
+}
