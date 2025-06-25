@@ -235,10 +235,10 @@ function createSortDropdown(onChangeCallback: (e: Event) => void): HTMLDivElemen
         { label: 'שם (ת-א)', value: SortEnum.ALPHABETICAL_DESC },
         { label: 'מחיר (מהזול ליקר)', value: SortEnum.PRICE_ASC },
         { label: 'מחיר (מהיקר לזול)', value: SortEnum.PRICE_DESC },
-        { label: 'הנחה שקלית (מהנמוכה לגבוהה)', value: SortEnum.DISCOUNT_ABS_ASC },
-        { label: 'הנחה שקלית (מהגבוהה לנמוכה)', value: SortEnum.DISCOUNT_ABS_DESC },
-        { label: 'הנחה אחוזית (מהנמוכה לגבוהה)', value: SortEnum.DISCOUNT_PERCENT_ASC },
-        { label: 'הנחה אחוזית (מהגבוהה לנמוכה)', value: SortEnum.DISCOUNT_PERCENT_DESC },
+        { label: 'הנחה בשקלים (מהנמוכה לגבוהה)', value: SortEnum.DISCOUNT_ABS_ASC },
+        { label: 'הנחה בשקלים (מהגבוהה לנמוכה)', value: SortEnum.DISCOUNT_ABS_DESC },
+        { label: 'הנחה באחוזים (מהנמוכה לגבוהה)', value: SortEnum.DISCOUNT_PERCENT_ASC },
+        { label: 'הנחה באחוזים (מהגבוהה לנמוכה)', value: SortEnum.DISCOUNT_PERCENT_DESC },
     ];
 
     options.forEach(opt => {
