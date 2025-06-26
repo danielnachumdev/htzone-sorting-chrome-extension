@@ -58,10 +58,13 @@ function createReleasePackage() {
     return new Promise((resolve, reject) => {
         fs.ensureDirSync(config.releasesDir);
 
+        const manifest = JSON.parse(fs.readFileSync('manifest.json', 'utf-8'));
+        const version = manifest.version;
+
         const date = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-        const existingBuilds = fs.readdirSync(config.releasesDir).filter(f => f.startsWith(`${config.packageName}-${date}`)).length;
+        const existingBuilds = fs.readdirSync(config.releasesDir).filter(f => f.startsWith(`${config.packageName}-v${version}-${date}`)).length;
         const buildNum = existingBuilds + 1;
-        const fileName = `${config.packageName}-${date}-${buildNum}.zip`;
+        const fileName = `${config.packageName}-v${version}-${date}-${buildNum}.zip`;
         const zipPath = path.join(config.releasesDir, fileName);
 
         const output = fs.createWriteStream(zipPath);
