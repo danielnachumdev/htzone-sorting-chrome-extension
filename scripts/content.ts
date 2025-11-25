@@ -32,6 +32,8 @@ chrome.storage.sync.get('extensionEnabled', (data) => {
         initSubcategoryPage();
     } else if (path.startsWith('/sale/')) {
         initSalePage();
+    } else if (path.startsWith('/search-result_algolia')) {
+        initAlgoliaSearchPage();
     }
 });
 
@@ -206,6 +208,118 @@ function initSalePage() {
         }
 
         if (newItemsAdded && currentSortType) sortSaleProducts(currentSortType);
+    };
+
+    observer = new MutationObserver(callback);
+    observer.observe(document.body, { childList: true, subtree: true });
+    addSortUI();
+}
+
+function initAlgoliaSearchPage() {
+    let currentSortType: SortType = '';
+    let observer: MutationObserver;
+
+    function sortAlgoliaProducts(sortType: SortType) {
+        if (observer) observer.disconnect();
+
+        // Find the Algolia hits list container
+        const container = document.querySelector('.ais-Hits-list');
+        if (!container) return;
+
+        // Find all product items (li.ais-Hits-item)
+        const items = Array.from(container.querySelectorAll('li.ais-Hits-item'));
+
+        const parsePrice = (priceStr: string | null | undefined): number => parseFloat(priceStr?.replace(/[^\d.]/g, '') || '0') || 0;
+
+        const getSortData = (item: Element): SortableItem | null => {
+            // Find the gallery_item div which contains the item attributes
+            const galleryItem = item.querySelector('.gallery_item');
+            if (!galleryItem) return null;
+
+            // Get product name from .item_text > div
+            const nameElement = galleryItem.querySelector('.item_text > div, .item_text div');
+            const name = nameElement?.textContent?.trim() || '';
+
+            // Get current price from item_price attribute on gallery_item or from .item_price text
+            const itemPriceAttr = galleryItem.getAttribute('item_price');
+            const itemPriceElement = galleryItem.querySelector('.item_price');
+            const priceNow = itemPriceAttr ?
+                parsePrice(itemPriceAttr) :
+                parsePrice(itemPriceElement?.textContent);
+
+            // Get list price (before discount) from .item_price_before_discount
+            const priceListElement = galleryItem.querySelector('.item_price_before_discount');
+            const priceList = priceListElement ? parsePrice(priceListElement.textContent) : 0;
+
+            const discountAbs = Math.max(priceList - priceNow, 0);
+            const discountPct = priceList > 0 ? (discountAbs / priceList) * 100 : 0;
+
+            // Only return item if we found at least a name
+            if (!name) return null;
+
+            return { name, priceNow, discountAbs, discountPct, element: item };
+        };
+
+        const sortedItems = items.map(getSortData).filter((item): item is SortableItem => item !== null).sort((a, b) => sortComparator(a, b, sortType));
+        sortedItems.forEach(item => container.appendChild(item.element));
+
+        if (observer) observer.observe(document.body, { childList: true, subtree: true });
+    }
+
+    function addSortUI() {
+        if (document.querySelector('#product-sort-select')) return;
+
+        // Find the specific filter container for Algolia search pages
+        const filterContainer = document.querySelector('#contentWrapper > div > div.search-panel > div.search-panel__filters > div');
+
+        if (!filterContainer) return; // Don't add UI if container doesn't exist yet
+
+        const filterBox = document.createElement('div');
+        filterBox.className = 'filterCatBox';
+        filterBox.id = 'custom-sort-filter-box';
+
+        const title = document.createElement('p');
+        title.textContent = 'מיון';
+        filterBox.appendChild(title);
+
+        const dropdown = createSortDropdown((e: Event) => {
+            e.stopPropagation();
+            const target = e.target as HTMLSelectElement;
+            const val = target.value as SortType;
+            currentSortType = val;
+            if (val) sortAlgoliaProducts(val);
+        });
+        filterBox.appendChild(dropdown);
+
+        filterContainer.appendChild(filterBox);
+    }
+
+    const callback = function (mutationsList: MutationRecord[]) {
+        if (!document.querySelector('#custom-sort-filter-box')) {
+            addSortUI();
+            const select = document.querySelector('#product-sort-select') as HTMLSelectElement | null;
+            if (select) select.value = currentSortType;
+        }
+
+        let newItemsAdded = false;
+        for (const mutation of mutationsList) {
+            if (mutation.type === 'childList') {
+                for (const node of Array.from(mutation.addedNodes)) {
+                    if (node.nodeType === Node.ELEMENT_NODE) {
+                        const element = node as Element;
+                        // Check if it's an Algolia hit item or contains one
+                        if (element.classList?.contains('ais-Hits-item') ||
+                            element.querySelector?.('li.ais-Hits-item, .gallery_item')) {
+                            newItemsAdded = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (newItemsAdded) break;
+        }
+
+        if (newItemsAdded && currentSortType) sortAlgoliaProducts(currentSortType);
     };
 
     observer = new MutationObserver(callback);

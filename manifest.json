@@ -21,7 +21,7 @@
             "matches": [
                 "https://www.htzone.co.il/subcategory/*",
                 "https://www.htzone.co.il/sale/*",
-                "https://www.htzone.co.il/search-result_algolia?*"
+                "https://www.htzone.co.il/search-result_algolia*"
             ],
             "js": [
                 "/scripts/content.js"
