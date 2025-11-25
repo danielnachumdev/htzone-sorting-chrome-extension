@@ -2,11 +2,11 @@
 
 [![Click here](https://img.shields.io/badge/Chrome%20Web%20Store-Click%20here-brightgreen?logo=google-chrome&logoColor=white)](https://chromewebstore.google.com/detail/htzone-sorting-extension/dpkejceaflbadlikcdipibcgmgchpmfb)
 
-A Chrome extension that enhances your experience on [htzone.co.il](https://www.htzone.co.il) by adding advanced product sorting capabilities to subcategory and sale pages.
+A Chrome extension that enhances your experience on [htzone.co.il](https://www.htzone.co.il) by adding advanced product sorting capabilities to subcategory, sale, and search results pages.
 
 ## Features
 
-- Adds a sorting dropdown to product lists on htzone.co.il subcategory and sale pages
+- Adds a sorting dropdown to product lists on htzone.co.il subcategory, sale, and search results pages
 - Sort products by:
   - Name (A-Z, Z-A)
   - Price (Low to High, High to Low)
@@ -35,7 +35,7 @@ A Chrome extension that enhances your experience on [htzone.co.il](https://www.h
 
 ## Usage
 
-- Visit any [htzone.co.il](https://www.htzone.co.il) subcategory or sale page.
+- Visit any [htzone.co.il](https://www.htzone.co.il) subcategory, sale, or search results page.
 - Use the sorting dropdown (מיון) added to the sidebar to sort products as you like.
 - You can enable/disable the extension globally from the extension popup.
 - If you change the enable/disable setting, reload the page for changes to take effect.
