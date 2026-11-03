@@ -1,52 +1,86 @@
 # HTZone Sorting Chrome Extension – Agent Context
 
-## Project purpose
+Implementation guide for coding agents changing this repo. Product pitch and user-facing install: [`README.md`](README.md).
 
-Chrome MV3 extension that adds client-side product sorting UI on [htzone.co.il](https://www.htzone.co.il) subcategory, sale, and search-results pages. Toggle on/off via the popup. No external data collection.
+---
 
-## Layout
+## Orientation
 
-```
+| Question | Answer |
+| -------- | ------ |
+| What is this? | Chrome **MV3** extension: client-side product sorting UI on htzone.co.il |
+| Source | `src/scripts/` (content), `src/popup/` (toolbar popup) |
+| Toolchain | Node + TypeScript (`tsc`) + `build.js` (package ZIP / unpacked) |
+| Manifest | Root `manifest.json` (packaged paths: `scripts/`, `popup/`, `icons/`) |
+| Tests | `npm test` — smoke no-op for the CI Node lane |
+| Secrets | Never commit Web Store credentials, API keys, or tokens |
+
+```text
 .
+├── .github/                 # CODEOWNERS, thin CI orchestrator
 ├── src/
-│   ├── scripts/          # Content scripts (content.ts → packaged as scripts/)
-│   └── popup/            # Popup HTML + TS
-├── assets/
-│   └── icons/            # Extension icons (packaged as icons/)
+│   ├── scripts/             # content.ts → packaged as scripts/content.js
+│   └── popup/               # popup.html + popup.ts
+├── assets/icons/            # → packaged as icons/
 ├── docs/
 │   ├── privacy-policy.md
-│   └── screenshots/      # Store / README visuals
-├── .github/workflows/    # CI (danielnachumdev/actions@latest)
-├── manifest.json         # MV3 manifest (packaged paths: scripts/, popup/, icons/)
-├── build.js              # compile + package → dist/, releases/, unpacked/
+│   └── screenshots/         # Store / README visuals
+├── manifest.json            # MV3; version source for the extension
+├── build.js                 # tsc + copy assets → dist/, releases/, unpacked/
 ├── package.json
 ├── tsconfig.json
-├── README.md
+├── README.md                # Marketing / user docs
 ├── CHANGELOG.md
 ├── LICENSE
 └── AGENTS.md
 ```
 
-Packaged extension layout (under `dist/` / `unpacked/`) keeps `scripts/`, `popup/`, and `icons/` so `manifest.json` paths stay stable. `build.js` maps `src/` and `assets/` into that layout.
+Packaged layout under `dist/` / `unpacked/` keeps `scripts/`, `popup/`, and `icons/` so `manifest.json` paths stay stable. `build.js` maps `src/` and `assets/` into that layout.
 
-## Build / test
+Shared CI: [`danielnachumdev/actions`](https://github.com/danielnachumdev/actions) (`@latest`). How to adopt: [`HOW-TO-USE.md`](https://github.com/danielnachumdev/actions/blob/latest/HOW-TO-USE.md).
 
-```sh
+---
+
+## Develop
+
+```bash
 npm ci
 npm test          # smoke no-op (CI lane)
-npm run compile   # tsc only
-npm run build     # tsc + copy assets + ZIP in releases/ + unpacked/
+npm run compile   # tsc only → dist/scripts, dist/popup
+npm run build     # tsc + assets + ZIP in releases/ + unpacked/
 ```
 
 Load `unpacked/` via Chrome → Extensions → Developer mode → Load unpacked.
 
-## CI / CD
+---
 
-- **CI:** `.github/workflows/ci.yml` consumes `danielnachumdev/actions@latest` (Node smoke + semver-ci on PRs).
-- **CD / Chrome Web Store publish:** not wired yet. Track separately; do not invent deploy secrets or store upload steps without an explicit issue/PR.
+## Domain notes
 
-## Do not commit
+- **Matches** (manifest + content routing): `/subcategory/*`, `/sale/*`, `/search-result_algolia*`. Each page type has its own initializer and DOM selectors in `src/scripts/content.ts`.
+- **Enable flag:** `chrome.storage.sync` key `extensionEnabled` (default on). Content script exits early when `false`. Popup may prompt reload on matching tabs.
+- **Sorting** reorders existing product list nodes in place (MutationObserver re-applies after DOM churn). Do not invent a backend or network calls.
+- **UI copy** for the sort control is Hebrew (מיון, option labels). Keep strings consistent with the live site language.
+- **Permissions:** `storage` (prefs), `tabs` (reload from popup). Avoid adding host or broader permissions without a clear need.
+- **Version:** bump/`CHANGELOG` track the string in `manifest.json` (e.g. `1.3`). CD to the Chrome Web Store is **not** wired yet — do not invent publish secrets or upload steps without an explicit issue/PR.
 
-- Secrets, API keys, Web Store credentials, `.pypirc`-style files
-- Generated output: `node_modules/`, `dist/`, `releases/`, `unpacked/`
-- Personal / live PII in issues, PRs, or docs
+---
+
+## PRs, CI, and releases
+
+1. Branch off `main`; open a PR into `main`.
+2. Attach **exactly one** semver label: `noBump` | `bumpPatch` | `bumpMinor` | `bumpMajor`.
+3. **CI** — `…/ci.yml@latest` (Node smoke) + `…/semver-ci.yml@latest` (validate label). Prefer **`CI / CI`** and **`Semver / Semver`**.
+4. Dependabot PRs stay on `noBump`.
+5. Change shared CI/semver behavior in **`danielnachumdev/actions`**, not by re-vendoring here.
+6. Chrome Web Store publish is manual / not automated in this repo.
+
+### Repo gates (already configured)
+
+- `.github/CODEOWNERS` — `@danielnachumdev`
+- Semver label required on PRs via shared `semver-ci`
+
+---
+
+## Sensitive / ignored
+
+Do not commit: Web Store credentials, API keys, tokens, `node_modules/`, `dist/`, `releases/`, `unpacked/`. No personal / live PII in issues, PRs, or docs. Respect `.gitignore`.
