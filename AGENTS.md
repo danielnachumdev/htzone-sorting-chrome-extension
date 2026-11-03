@@ -16,7 +16,7 @@ Chrome MV3 extension that adds client-side product sorting UI on [htzone.co.il](
 ├── docs/
 │   ├── privacy-policy.md
 │   └── screenshots/      # Store / README visuals
-├── .github/workflows/    # CI (danielnachumdev/actions@v1)
+├── .github/workflows/    # CI (danielnachumdev/actions@latest)
 ├── manifest.json         # MV3 manifest (packaged paths: scripts/, popup/, icons/)
 ├── build.js              # compile + package → dist/, releases/, unpacked/
 ├── package.json
@@ -42,7 +42,7 @@ Load `unpacked/` via Chrome → Extensions → Developer mode → Load unpacked.
 
 ## CI / CD
 
-- **CI:** `.github/workflows/ci.yml` consumes `danielnachumdev/actions@v1` (Node smoke + semver-ci on PRs).
+- **CI:** `.github/workflows/ci.yml` consumes `danielnachumdev/actions@latest` (Node smoke + semver-ci on PRs).
 - **CD / Chrome Web Store publish:** not wired yet. Track separately; do not invent deploy secrets or store upload steps without an explicit issue/PR.
 
 ## Do not commit
