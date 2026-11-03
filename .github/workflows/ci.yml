@@ -1,6 +1,6 @@
 name: CI
 
-# Thin orchestrator — danielnachumdev/actions@v1 (Node lane smoke)
+# Thin orchestrator — danielnachumdev/actions@latest (Node lane smoke)
 
 on:
   push:
@@ -21,11 +21,11 @@ permissions:
 jobs:
   ci:
     name: CI
-    uses: danielnachumdev/actions/.github/workflows/ci.yml@v1
+    uses: danielnachumdev/actions/.github/workflows/ci.yml@latest
 
   semver:
     name: Semver
     if: github.event_name == 'pull_request'
-    uses: danielnachumdev/actions/.github/workflows/semver-ci.yml@v1
+    uses: danielnachumdev/actions/.github/workflows/semver-ci.yml@latest
     with:
-      standards-ref: v1
+      standards-ref: latest
