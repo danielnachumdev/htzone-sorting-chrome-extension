@@ -24,7 +24,6 @@ jobs:
     name: CI
     uses: danielnachumdev/actions/.github/workflows/ci.yml@latest
 
-
   dependabot-auto-merge:
     name: Dependabot auto-merge
     needs: [ci]
