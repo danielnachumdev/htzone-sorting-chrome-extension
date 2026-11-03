@@ -20,7 +20,7 @@
   "homepage": "https://github.com/danielnachumdev/htzone-sorting-chrome-extension#readme",
   "description": "",
   "devDependencies": {
-    "@types/archiver": "^6.0.3",
+    "@types/archiver": "^8.0.0",
     "@types/chrome": "^0.0.326",
     "@types/extract-zip": "^2.0.0",
     "@types/fs-extra": "^11.0.4",
