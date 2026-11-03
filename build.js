@@ -9,8 +9,16 @@ const config = {
     distDir: 'dist',
     releasesDir: 'releases',
     unpackedDir: 'unpacked',
-    staticDirs: ['icons', 'popup'],
-    staticRootFiles: ['manifest.json', 'LICENSE', 'privacy-policy.md']
+    // Source → packaged path under dist/ (manifest keeps icons/, popup/, scripts/)
+    staticDirs: [
+        { src: 'assets/icons', dest: 'icons' },
+        { src: 'src/popup', dest: 'popup' },
+    ],
+    staticRootFiles: [
+        { src: 'manifest.json', dest: 'manifest.json' },
+        { src: 'LICENSE', dest: 'LICENSE' },
+        { src: 'docs/privacy-policy.md', dest: 'privacy-policy.md' },
+    ],
 };
 
 async function main() {
@@ -20,21 +28,21 @@ async function main() {
         fs.emptyDirSync(config.distDir);
         fs.emptyDirSync(config.unpackedDir);
 
-        // 2. Compile TypeScript
+        // 2. Compile TypeScript (src/scripts → dist/scripts, src/popup → dist/popup)
         console.log('[+] Compiling TypeScript...');
         execSync('npm run compile --silent', { stdio: 'inherit' });
 
-        // 3. Copy static assets
+        // 3. Copy static assets into packaged layout
         console.log(`[+] Copying static assets to ${config.distDir}...`);
         for (const file of config.staticRootFiles) {
-            if (fs.existsSync(file)) {
-                fs.copySync(file, path.join(config.distDir, file));
+            if (fs.existsSync(file.src)) {
+                fs.copySync(file.src, path.join(config.distDir, file.dest));
             }
         }
         for (const dir of config.staticDirs) {
-            if (fs.existsSync(dir)) {
-                fs.copySync(dir, path.join(config.distDir, dir), {
-                    filter: (src) => !src.endsWith('.ts')
+            if (fs.existsSync(dir.src)) {
+                fs.copySync(dir.src, path.join(config.distDir, dir.dest), {
+                    filter: (src) => !src.endsWith('.ts'),
                 });
             }
         }
@@ -84,4 +92,4 @@ async function createUnpackedVersion(zipPath) {
     await extract(zipPath, { dir: path.resolve(config.unpackedDir) });
 }
 
-main(); 
+main();
