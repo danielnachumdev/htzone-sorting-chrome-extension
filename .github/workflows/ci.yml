@@ -1,13 +1,14 @@
 name: CI
 
-# Thin orchestrator — danielnachumdev/actions@latest (Node lane smoke)
+# Thin orchestrator — danielnachumdev/actions@latest (no Semver; not a publisher).
+# Prefer requiring check "CI / CI" only.
 
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
-    types: [opened, synchronize, reopened, labeled, unlabeled]
+    types: [opened, synchronize, reopened]
   workflow_dispatch:
 
 concurrency:
@@ -23,16 +24,9 @@ jobs:
     name: CI
     uses: danielnachumdev/actions/.github/workflows/ci.yml@latest
 
-  semver:
-    name: Semver
-    if: github.event_name == 'pull_request'
-    uses: danielnachumdev/actions/.github/workflows/semver-ci.yml@latest
-    with:
-      standards-ref: latest
-
   dependabot-auto-merge:
     name: Dependabot auto-merge
-    needs: [ci, semver]
+    needs: [ci]
     if: github.event_name == 'pull_request' && github.event.pull_request.user.login == 'dependabot[bot]'
     permissions:
       contents: write
