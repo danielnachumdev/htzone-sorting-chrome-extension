@@ -42,15 +42,17 @@ A Chrome extension that enhances your experience on [htzone.co.il](https://www.h
 
 ## Development
 
-- Source TypeScript files are in `scripts/` and `popup/`.
-- Build with `npm run build` (runs TypeScript compiler and packages assets).
-- The build script outputs to `dist/`, creates a ZIP in `releases/`, and an unpacked version in `unpacked/`.
-- To modify popup UI, edit `popup/popup.html` and `popup/popup.ts`.
-- Main content script logic is in `scripts/content.ts`.
+- Source TypeScript lives under `src/scripts/` (content script) and `src/popup/` (popup UI).
+- Icons are in `assets/icons/`; privacy policy and screenshots under `docs/`.
+- Build with `npm run build` (TypeScript compile + package assets). Packaged paths remain `scripts/`, `popup/`, and `icons/` to match `manifest.json`.
+- Outputs: `dist/`, ZIP in `releases/`, unpacked load directory in `unpacked/`.
+- Edit popup UI in `src/popup/popup.html` and `src/popup/popup.ts`.
+- Main content script: `src/scripts/content.ts`.
+- Agent / contributor layout notes: [AGENTS.md](AGENTS.md).
 
 ## Privacy
 
-See [privacy-policy.md](privacy-policy.md) for details. This extension does **not** collect, store, or transmit any personal data. All operations are performed locally in your browser.
+See [docs/privacy-policy.md](docs/privacy-policy.md) for details. This extension does **not** collect, store, or transmit any personal data. All operations are performed locally in your browser.
 
 ## License
 
