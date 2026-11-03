@@ -1,59 +1,49 @@
 # HTZone Sorting Chrome Extension
 
-[![Click here](https://img.shields.io/badge/Chrome%20Web%20Store-Click%20here-brightgreen?logo=google-chrome&logoColor=white)](https://chromewebstore.google.com/detail/htzone-sorting-extension/dpkejceaflbadlikcdipibcgmgchpmfb)
+**Client-side product sorting for [htzone.co.il](https://www.htzone.co.il)** — name, price, and discount controls on subcategory, sale, and search results pages.
 
-A Chrome extension that enhances your experience on [htzone.co.il](https://www.htzone.co.il) by adding advanced product sorting capabilities to subcategory, sale, and search results pages.
+[![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-Install-brightgreen?logo=google-chrome&logoColor=white)](https://chromewebstore.google.com/detail/htzone-sorting-extension/dpkejceaflbadlikcdipibcgmgchpmfb)
+[![CI](https://github.com/danielnachumdev/htzone-sorting-chrome-extension/actions/workflows/ci.yml/badge.svg)](https://github.com/danielnachumdev/htzone-sorting-chrome-extension/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-## Features
+![Sorting UI on htzone.co.il](docs/screenshots/showcase.png)
 
-- Adds a sorting dropdown to product lists on htzone.co.il subcategory, sale, and search results pages
-- Sort products by:
-  - Name (A-Z, Z-A)
-  - Price (Low to High, High to Low)
-  - Discount (Absolute/Percentage, Ascending/Descending)
-- Works entirely client-side; no data is sent or stored externally
-- Toggle extension on/off from the popup menu
-- Sticky sidebar for sorting controls
+## Why this extension?
 
-## Installation
+htzone.co.il product grids do not expose the sort options many shoppers want. This MV3 extension injects a sticky **מיון** (sort) control so you can reorder visible products locally — no accounts, no backend, no data leaving the browser.
 
-### From the Chrome Web Store
+- **Sort by** name (A–Z / Z–A), price (low↔high), discount absolute or percent (asc/desc)
+- **Works on** subcategory (`/subcategory/*`), sale (`/sale/*`), and Algolia search (`/search-result_algolia*`) pages
+- **Toggle** on/off from the toolbar popup (reload the tab after changing)
+- **Privacy-first** — all sorting runs in-page; nothing is collected or transmitted
 
-[Install directly from the Chrome Web Store](https://chromewebstore.google.com/detail/htzone-sorting-extension/dpkejceaflbadlikcdipibcgmgchpmfb)
+## Install
 
-### From Source (Unpacked)
-1. Clone or download this repository.
-2. Run `npm install` to install dependencies.
-3. Build the extension:
-   ```sh
-   npm run build
-   ```
-   This will generate the unpacked extension in the `unpacked/` directory.
-4. Open Chrome and go to `chrome://extensions/`.
-5. Enable "Developer mode" (top right).
-6. Click "Load unpacked" and select the `unpacked/` directory.
+### Chrome Web Store (recommended)
+
+[Install from the Chrome Web Store](https://chromewebstore.google.com/detail/htzone-sorting-extension/dpkejceaflbadlikcdipibcgmgchpmfb)
+
+### From source (unpacked)
+
+1. Clone this repository.
+2. `npm install`
+3. `npm run build` → output in `unpacked/`
+4. Chrome → `chrome://extensions/` → Developer mode → **Load unpacked** → select `unpacked/`
 
 ## Usage
 
-- Visit any [htzone.co.il](https://www.htzone.co.il) subcategory, sale, or search results page.
-- Use the sorting dropdown (מיון) added to the sidebar to sort products as you like.
-- You can enable/disable the extension globally from the extension popup.
-- If you change the enable/disable setting, reload the page for changes to take effect.
-
-## Development
-
-- Source TypeScript lives under `src/scripts/` (content script) and `src/popup/` (popup UI).
-- Icons are in `assets/icons/`; privacy policy and screenshots under `docs/`.
-- Build with `npm run build` (TypeScript compile + package assets). Packaged paths remain `scripts/`, `popup/`, and `icons/` to match `manifest.json`.
-- Outputs: `dist/`, ZIP in `releases/`, unpacked load directory in `unpacked/`.
-- Edit popup UI in `src/popup/popup.html` and `src/popup/popup.ts`.
-- Main content script: `src/scripts/content.ts`.
-- Agent / contributor layout notes: [AGENTS.md](AGENTS.md).
+1. Open a subcategory, sale, or search results page on [htzone.co.il](https://www.htzone.co.il).
+2. Use the **מיון** dropdown in the sidebar to sort the product list.
+3. Enable or disable the extension from the popup; reload the page for the change to apply.
 
 ## Privacy
 
-See [docs/privacy-policy.md](docs/privacy-policy.md) for details. This extension does **not** collect, store, or transmit any personal data. All operations are performed locally in your browser.
+See [docs/privacy-policy.md](docs/privacy-policy.md). The extension does **not** collect, store externally, or transmit personal data. Preferences use `chrome.storage.sync` locally in the browser.
+
+## Contributors / agents
+
+Build layout, CI/semver labels, and DOM domain notes: **[AGENTS.md](AGENTS.md)**.
 
 ## License
 
-MIT License. See [LICENSE](LICENSE) for details. 
+MIT. See [LICENSE](LICENSE).
