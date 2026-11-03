@@ -21,7 +21,7 @@
   "description": "",
   "devDependencies": {
     "@types/archiver": "^8.0.0",
-    "@types/chrome": "^0.0.326",
+    "@types/chrome": "^0.3.7",
     "@types/extract-zip": "^2.0.0",
     "@types/fs-extra": "^11.0.4",
     "archiver": "^8.0.0",
